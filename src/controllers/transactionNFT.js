@@ -114,3 +114,110 @@ exports.transactions = async(req, res)=>{
         res.status(500).send({ success: false, message: err });
     }
 }
+
+//get api 
+exports.totalTransactions = async(req, res)=>{
+    try{
+       let result = await transactionNftContract.methods.totalTransactions().call();
+       const resultString = result.toString();
+       res.status(200).json({
+        success: true,
+        result: resultString,
+        message: "Total Transactions",
+        code: "totalTransactions_Api"
+    });
+    }catch (err) {
+        res.status(500).send({ success: false, message: err });
+    }
+}
+
+//get api 
+
+exports.transactionIDAddress = async(req, res) =>{
+    try{
+        let nftId = req.params.id;
+        const result = await transactionNftContract.methods.transactionIDAddress(nftId).call();
+
+        res.status(200).json({
+            success: true,
+            result: result,
+            message: "Transaction ID Address",
+            code: "transactionIDAddress_Api"
+        });
+    }catch(err){
+        res.status(500).send({ success: false, message: err });
+    }
+}
+
+//get api
+exports.getAddressForTransaction = async(req, res)=>{
+    try{
+        let transactionID = req.params.id;
+
+        const result = await transactionNftContract.methods.getAddressForTransaction(transactionID).call();
+
+        res.status(200).json({
+            success: true,
+            result: result,
+            message: "Get Address For Transaction",
+            code: "getAddressForTransaction_Api"
+        });
+    }catch(err){
+        res.status(500).send({ success: false, message: err });
+    }
+}
+
+//post api
+exports.rescueToken = async(req,res)=>{
+    try{
+       const {amount, ownerAddress} = req.body;
+       const weiAmount = web3.utils.toWei(amount.toString(), 'ether');
+       let result = await transactionNftContract.methods.rescueToken(weiAmount)
+       .send({from: ownerAddress})
+
+       res.status(200).json({
+        success: true,
+        result: result,
+        message: "Rescue Token",
+        code: "rescueToken_Api"
+    });
+    }catch(err){
+        res.status(500).send({ success: false, message: err }); 
+    }
+}
+
+//post api 
+exports.approve = async(req,res) =>{
+    try{
+     const {userAddress, tokenId, address} = req.body;
+     let result = await transactionNftContract.methods.approve(userAddress, tokenId)
+     .send({ from: address})
+
+     res.status(200).json({
+        success: true,
+        result: result,
+        message: "approve",
+        code: "approve_Api"
+    });
+    }catch(err){
+        res.status(500).send({ success: false, message: err }); 
+    }
+}
+
+// post api
+exports.transferFrom = async(req, res)=>{
+    try{
+      const {fromAddress, toAddress, tokenId, address} = req.body;
+      let result = await transactionNftContract.methods.transferFrom(fromAddress, toAddress, tokenId)
+      .send({from : address})
+
+      res.status(200).json({
+        success: true,
+        result: result,
+        message: "Transfer From",
+        code: "transferFrom_Api"
+    });
+    }catch(err){
+        res.status(500).send({ success: false, message: err }); 
+    }
+}

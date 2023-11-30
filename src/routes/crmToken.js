@@ -8,7 +8,12 @@ const {createWallet,
     setPurchaseFeePercentage,
     setLiquidityPoolWallet,
     setPurchaseFeeWallet,
-    setDecentralizedExchange
+    setDecentralizedExchange,
+    approve,
+    mint,
+    rescueToken,
+    rescueUSDT,
+    getUSDTAddress
 } = require("../controllers/crmToken")
 
 router.route("/create-wallet").get(createWallet)
@@ -20,4 +25,9 @@ router.route("/set-purchase-fee-percentage").post(setPurchaseFeePercentage)
 router.route("/set-liquidity-pool-wallet").post(setLiquidityPoolWallet)
 router.route("/set-purchase-fee-wallet").post(setPurchaseFeeWallet)
 router.route("/set-decentralized-exchange").post(setDecentralizedExchange)
+router.route("/approve").post(approve)
+router.route("/mint").post(mint)
+router.route("/rescue-token").post(rescueToken)
+router.route("/rescue-USDT").post(rescueUSDT)
+router.route("/get-USDT-address").get(getUSDTAddress)
 module.exports = router
